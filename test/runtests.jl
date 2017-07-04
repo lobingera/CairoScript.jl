@@ -79,7 +79,7 @@ stroke
     c = CairoScript.Interpreter()
     c = CairoScript.interpreter_install_hooks(c,h)
     status = CairoScript.interpreter_feed_string(c,testdata)
-     display(testdata)
+    display(testdata)
     @test status == 0
 
     outputfile = "out.png"
