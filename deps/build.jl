@@ -43,7 +43,7 @@ end
 
 @static if is_windows() begin
         using WinRPM
-        provides(WinRPM.RPM,"libcairo-script-interpreter-2-2",csi,os = :Windows)
+        provides(WinRPM.RPM,"libcairo-script-interpreter-2",csi,os = :Windows)
     end
 end
 
