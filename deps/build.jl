@@ -37,7 +37,7 @@ end
 
 @static if is_apple() begin
         using Homebrew
-        provides(Homebrew.HB, "libcairo-script-interpreter", [csi], os=:Darwin)
+        provides(Homebrew.HB, "cairo", [csi], os=:Darwin)
     end
 end
 
