@@ -28,7 +28,7 @@ using Compat
 
 @BinDeps.setup
 
-csi = library_dependency("csi", aliases = ["libcairo-script-interpreter", "libcairo-script-interpreter-2.2", "libcairo-script-interpreter-2-2", "libcairo-script-interpreter-2", "libcairo-script-interpreter-2.so.2"])
+csi = library_dependency("csi", aliases = ["libcairo-script-interpreter", "libcairo-script-interpreter-2.2", "libcairo-script-interpreter-2-2", "libcairo-script-interpreter-2.dll", "libcairo-script-interpreter-2.so.2"])
 
 @static if is_linux() begin
         provides(AptGet, "libcairo-script-interpreter2-2",csi)
@@ -43,7 +43,7 @@ end
 
 @static if is_windows() begin
         using WinRPM
-        provides(WinRPM.RPM,"libcairo-script-interpreter-2",csi,os = :Windows)
+        provides(WinRPM.RPM,"libcairo-script-interpreter2",csi,os = :Windows)
     end
 end
 
