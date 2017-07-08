@@ -2,9 +2,9 @@
 
 [![Build Status](https://travis-ci.org/lobingera/CairoScript.jl.svg?branch=master)](https://travis-ci.org/lobingera/CairoScript.jl)
 
-[![Coverage Status](https://coveralls.io/repos/lobingera/CairoScript.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/lobingera/CairoScript.jl?branch=master)
+[![Build status](https://ci.appveyor.com/api/projects/status/bth0v357l1row5cn?svg=true)](https://ci.appveyor.com/project/lobingera/cairoscript-jl)
 
-[![codecov.io](http://codecov.io/github/lobingera/CairoScript.jl/coverage.svg?branch=master)](http://codecov.io/github/lobingera/CairoScript.jl?branch=master)
+[![Coverage Status](https://coveralls.io/repos/lobingera/CairoScript.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/lobingera/CairoScript.jl?branch=master)
 
 This package provides an interface to the cairo script interpreter.
 The cairo script interpreter is actually a part of the libcairo development infrastructure and provided for debugging and performance evaluation purposes. CairoScript is a simple PostScript-like description language in ASCII form for cairo drawing operations. CairoScript can be output by choosing a special surface in Cairo; this package provides playback of scripts created.
