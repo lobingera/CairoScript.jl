@@ -11,9 +11,9 @@ function interpreter_install_hooks(c::Interpreter,h::InterpreterHooks)
     c
 end
 
-function interpreter_run(c::Interpreter,filename::String)
+function interpreter_run(c::Interpreter,filename::AbstractString)
     ccall((:cairo_script_interpreter_run,_jl_libcsi),
-        UInt64,(Ptr{Void},Ptr{UInt8}),c.ptr,string(filename))
+        UInt64,(Ptr{Void},Ptr{UInt8}),c.ptr,@compat(String(filename)))
 end
 
 #function interpreter_feed_stream(c::Interpreter,stream::IOStream)
@@ -23,7 +23,7 @@ end
 
 function interpreter_feed_string(c::Interpreter,s::AbstractString)
     ccall((:cairo_script_interpreter_feed_string,_jl_libcsi),
-        UInt64,(Ptr{Void},Ptr{UInt8}),c.ptr,s)
+        UInt64,(Ptr{Void},Ptr{UInt8}),c.ptr,@compat(String(s)))
 end
 
 
