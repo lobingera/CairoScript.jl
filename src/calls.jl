@@ -23,7 +23,7 @@ end
 
 function interpreter_feed_string(c::Interpreter,s::AbstractString)
     ccall((:cairo_script_interpreter_feed_string,_jl_libcsi),
-        UInt64,(Ptr{Void},Cstring),c.ptr,@compat(String(s)))
+        UInt64,(Ptr{Void},Cstring,UInt64),c.ptr,@compat(String(s)),length(s))
 end
 
 
