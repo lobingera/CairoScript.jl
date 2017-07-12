@@ -13,13 +13,15 @@ else
     const Test = BaseTestNext
 end
 
+include("test_painting.jl")
 
 pkg_dir = dirname(dirname(@__FILE__))
 
 # Image Surface
 @testset "Interpreter Run" begin
 
-    surf = CairoImageSurface(512, 512, Cairo.FORMAT_ARGB32)
+    # run a script that includes a writing operation
+    surf = CairoImageSurface(256, 256, Cairo.FORMAT_ARGB32)
     testfile = joinpath(pkg_dir,"data","a1.cs");
 
     h = CairoScript.InterpreterHooks()
@@ -36,7 +38,8 @@ pkg_dir = dirname(dirname(@__FILE__))
     rm(outputfile)
 
 
-    surf = CairoImageSurface(512, 512, Cairo.FORMAT_ARGB32)
+    # run a script that just does painting
+    surf = CairoImageSurface(256, 256, Cairo.FORMAT_ARGB32)
     testfile = joinpath(pkg_dir,"data","a2.cs");
 
     h = CairoScript.InterpreterHooks()
@@ -55,7 +58,8 @@ pkg_dir = dirname(dirname(@__FILE__))
     @test isfile(outputfile)
     rm(outputfile)
 
-    surf = CairoImageSurface(512, 512, Cairo.FORMAT_ARGB32)
+    # script from string
+    surf = CairoImageSurface(256, 256, Cairo.FORMAT_ARGB32)
     testdata = """
 %!CairoScript
 << /content //COLOR_ALPHA /width 400 /height 300 >> surface context
@@ -67,12 +71,6 @@ fill+
 stroke
 """
 
-#     testdata = """
-# %!CairoScript
-# << /content //COLOR_ALPHA /width 400 /height 300 >> surface context
-# 1 0 1 rgb set-source
-# paint
-# """
     h = CairoScript.InterpreterHooks()
     h.surface_create = CairoScript.surf_create_c
     h.closure = surf.ptr
@@ -90,6 +88,29 @@ stroke
     @test isfile(outputfile)
     rm(outputfile)
 
+end
 
+@testset "Content Test" begin
+
+    # test if surface contains color
+    surf = CairoImageSurface(256, 256, Cairo.FORMAT_ARGB32)
+    testfile = joinpath(pkg_dir,"data","a2.cs");
+
+    h = CairoScript.InterpreterHooks()
+    h.surface_create = CairoScript.surf_create_c
+    h.closure = surf.ptr
+    c = CairoScript.Interpreter()
+    c = CairoScript.interpreter_install_hooks(c,h)
+    status = CairoScript.interpreter_run(c,testfile)
+    @test status == 0
+    
+    d = simple_hist(matrix_read(surf))
+    
+    @test length(d) == 1 
+    @test collect(keys(d))[1] == 0xffffff00
+
+    finish(surf)
+    surf.ptr = C_NULL;
+    
 end
 
