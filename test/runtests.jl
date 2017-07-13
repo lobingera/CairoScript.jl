@@ -111,6 +111,25 @@ end
 
     finish(surf)
     surf.ptr = C_NULL;
+
+    # short setup, same data and test
+    surf = CairoImageSurface(256, 256, Cairo.FORMAT_ARGB32)
+    testfile = joinpath(pkg_dir,"data","a2.cs");
+    c = CairoScript.Interpreter(
+        CairoScript.InterpreterHooks(
+            closure = surf.ptr, surface_create = CairoScript.surf_create_c))
+    status = CairoScript.interpreter_run(c,testfile)
+
+    @test status == 0
     
+    d = simple_hist(matrix_read(surf))
+    
+    @test length(d) == 1 
+    @test collect(keys(d))[1] == 0xffffff00
+
+    finish(surf)
+
+    surf.ptr = C_NULL;        
+
 end
 

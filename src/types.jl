@@ -44,11 +44,22 @@ type InterpreterHooks <: GraphicsDevice
 	copy_page::Ptr{Void} 
 	create_source_image::Ptr{Void} 
 
-	function InterpreterHooks()
+	function InterpreterHooks(;
+                closure = C_NULL, 
+                surface_create = C_NULL,
+                surface_destroy = C_NULL,
+                context_create = C_NULL, 
+                context_destroy = C_NULL,
+                show_page = C_NULL, 
+                copy_page = C_NULL, 
+                create_source_image = C_NULL)
+
 		#self = new(cl(CairoSurface(Ptr{Void}(0))),C_NULL,C_NULL,C_NULL,C_NULL,C_NULL,C_NULL,C_NULL)
-        self = new(C_NULL,C_NULL,C_NULL,C_NULL,C_NULL,C_NULL,C_NULL,C_NULL)
+        self = new(closure,surface_create,surface_destroy,context_create,context_destroy,show_page,copy_page,create_source_image)
 		self
 	end
+
+    #function InterpreterHooks()
 end
 
 # typedef enum _csi_status {

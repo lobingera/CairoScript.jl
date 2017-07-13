@@ -39,15 +39,15 @@ end
 # cairo_public unsigned int
 # cairo_script_interpreter_get_line_number (cairo_script_interpreter_t *ctx);
 
-function interpreter_finish(c::Interpreter)
-    ccall((:cairo_script_interpreter_finish,_jl_libcsi),
-        UInt64,(Ptr{Void},),c.ptr)
-end
+# function interpreter_finish(c::Interpreter)
+#     ccall((:cairo_script_interpreter_finish,_jl_libcsi),
+#         UInt64,(Ptr{Void},),c.ptr)
+# end
 
-function interpreter_destroy(c::Interpreter)
-    ccall((:cairo_script_interpreter_destroy,_jl_libcsi),
-        UInt64,(Ptr{Void},),c.ptr)
-end
+# function interpreter_destroy(c::Interpreter)
+#     ccall((:cairo_script_interpreter_destroy,_jl_libcsi),
+#         UInt64,(Ptr{Void},),c.ptr)
+# end
 
 # version 0 -> register surface in closure and use
 
