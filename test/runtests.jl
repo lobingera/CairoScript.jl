@@ -4,14 +4,9 @@ using CairoScript
 using Compat, Colors
 import Compat.String
 
-@compat import Base.show
+import Base.show
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Base.Test
 
 include("test_painting.jl")
 
