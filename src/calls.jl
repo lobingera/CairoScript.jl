@@ -13,7 +13,7 @@ end
 
 function interpreter_run(c::Interpreter,filename::AbstractString)
     ccall((:cairo_script_interpreter_run,_jl_libcsi),
-        UInt64,(Ptr{Void},Cstring),c.ptr,@compat(String(filename)))
+        UInt64,(Ptr{Void},Cstring),c.ptr,String(filename))
 end
 
 #function interpreter_feed_stream(c::Interpreter,stream::IOStream)
@@ -23,7 +23,7 @@ end
 
 function interpreter_feed_string(c::Interpreter,s::AbstractString)
     ccall((:cairo_script_interpreter_feed_string,_jl_libcsi),
-        UInt64,(Ptr{Void},Cstring,UInt64),c.ptr,@compat(String(s)),length(s))
+        UInt64,(Ptr{Void},Cstring,UInt64),c.ptr,String(s),length(s))
 end
 
 
