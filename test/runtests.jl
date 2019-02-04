@@ -6,12 +6,8 @@ import Compat.String
 
 @compat import Base.show
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+
+using Test
 
 include("test_painting.jl")
 
@@ -25,7 +21,7 @@ pkg_dir = dirname(dirname(@__FILE__))
     testfile = joinpath(pkg_dir,"data","a1.cs");
 
     h = CairoScript.InterpreterHooks()
-    h.surface_create = CairoScript.surf_create_c
+    h.surface_create = CairoScript.surf_create_c[]
     h.closure = surf.ptr
     c = CairoScript.Interpreter()
     c = CairoScript.interpreter_install_hooks(c,h)
@@ -43,8 +39,9 @@ pkg_dir = dirname(dirname(@__FILE__))
     testfile = joinpath(pkg_dir,"data","a2.cs");
 
     h = CairoScript.InterpreterHooks()
-    h.surface_create = CairoScript.surf_create_c
+    h.surface_create = CairoScript.surf_create_c[]
     h.closure = surf.ptr
+    
     c = CairoScript.Interpreter()
     c = CairoScript.interpreter_install_hooks(c,h)
     status = CairoScript.interpreter_run(c,testfile)
@@ -72,7 +69,7 @@ stroke
 """
 
     h = CairoScript.InterpreterHooks()
-    h.surface_create = CairoScript.surf_create_c
+    h.surface_create = CairoScript.surf_create_c[]
     h.closure = surf.ptr
     c = CairoScript.Interpreter()
     c = CairoScript.interpreter_install_hooks(c,h)
@@ -97,7 +94,7 @@ end
     testfile = joinpath(pkg_dir,"data","a2.cs");
 
     h = CairoScript.InterpreterHooks()
-    h.surface_create = CairoScript.surf_create_c
+    h.surface_create = CairoScript.surf_create_c[]
     h.closure = surf.ptr
     c = CairoScript.Interpreter()
     c = CairoScript.interpreter_install_hooks(c,h)
@@ -117,7 +114,7 @@ end
     testfile = joinpath(pkg_dir,"data","a2.cs");
     c = CairoScript.Interpreter(
         CairoScript.InterpreterHooks(
-            closure = surf.ptr, surface_create = CairoScript.surf_create_c))
+            closure = surf.ptr, surface_create = CairoScript.surf_create_c[]))
     status = CairoScript.interpreter_run(c,testfile)
 
     @test status == 0

@@ -6,7 +6,8 @@ isfile(depsjl) ? include(depsjl) : error("CairoScript not properly ",
 
 using Compat;  import Compat.String
 using Cairo
-importall Graphics
+
+import Graphics: GraphicsDevice
 
 include("types.jl")
 include("calls.jl")

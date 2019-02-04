@@ -1,0 +1,633 @@
+  _       _ _(_)_     |  Documentation: https://docs.julialang.org
+  (_)     | (_) (_)    |
+   _ _   _| |_  __ _   |  Type "?" for help, "]?" for Pkg help.
+  | | | | | | |/ _` |  |
+  | | |_| | | | (_| |  |  Version 1.0.2 (2018-11-08)
+ _/ |\__'_|_|_|\__'_|  |  Official https://julialang.org/ release
+|__/                   |
+
+julia> using Cairo
+
+julia> using CairoScript
+[ Info: Recompiling stale cache file /home/lobi/.julia/compiled/v1.0/CairoScript/zx0Ww.ji for CairoScript [22972aad-6828-5944-887c-95c4b9e553f7]
+┌ Warning: Package CairoScript does not have Libdl in its dependencies:
+│ - If you have CairoScript checked out for development and have
+│   added Libdl as a dependency but haven't updated your primary
+│   environment's manifest file, try `Pkg.resolve()`.
+│ - Otherwise you may need to report an issue with CairoScript
+└ Loading Libdl into CairoScript from project dependency, future warnings for CairoScript are suppressed.
+
+julia> testfile = "../juliapackages/CairoScript/data/a1.cs"
+"../juliapackages/CairoScript/data/a1.cs"
+
+julia> surf = CairoImageSurface(256, 256, Cairo.FORMAT_ARGB32)
+Cairo.CairoSurfaceBase{UInt32}(Ptr{Nothing} @0x0000000000ce7250, 256.0, 256.0)
+
+julia> h = CairoScript.InterpreterHooks()
+CairoScript.InterpreterHooks(Ptr{Nothing} @0x0000000000000000, Ptr{Nothing} @0x0000000000000000, Ptr{Nothing} @0x0000000000000000, Ptr{Nothing} @0x0000000000000000, Ptr{Nothing} @0x0000000000000000, Ptr{Nothing} @0x0000000000000000, Ptr{Nothing} @0x0000000000000000, Ptr{Nothing} @0x0000000000000000)
+
+julia> h.surface_create = CairoScript.surf_create_c[]
+Ptr{Nothing} @0x00007fffe004b420
+
+julia> h.closure = surf.ptr
+Ptr{Nothing} @0x0000000000ce7250
+
+julia> c = CairoScript.interpreter_install_hooks(c,h)
+ERROR: UndefVarError: c not defined
+Stacktrace:
+ [1] top-level scope at none:0
+
+julia> c = CairoScript.Interpreter()
+CairoScript.Interpreter(Ptr{CairoScript.csi_t} @0x0000000001634230)
+
+julia> c = CairoScript.interpreter_install_hooks(c,h)
+CairoScript.Interpreter(Ptr{CairoScript.csi_t} @0x0000000001634230)
+
+julia> mstatus = CairoScript.interpreter_run(c,testfile)
+
+Thread 1 "julia" hit Breakpoint 1, cairo_script_interpreter_run (
+    ctx=0x1634230, 
+    filename=0x7fffe6561758 "../juliapackages/CairoScript/data/a1.cs")
+    at cairo-script-interpreter.c:549
+549     {
+(gdb) p ctx
+$1 = (csi_t *) 0x1634230
+(gdb) p *ctx
+$2 = {ref_count = 1, status = CSI_STATUS_SUCCESS, finished = 0, hooks = {
+    closure = 0xce7250, 
+    surface_create = 0x7fffe004b420 <jlcapi_proto_surface_create_35250>, 
+    surface_destroy = 0x0, context_create = 0x0, context_destroy = 0x0, 
+    show_page = 0x0, copy_page = 0x0, create_source_image = 0x0}, strings = {
+    keys_equal = 0x7fffcc468c10 <_intern_string_equal>, 
+    arrangement = 0x7fffcc47a598 <hash_table_arrangements+120>, 
+    entries = 0x16e0d60, live_entries = 281, used_entries = 281, 
+    iterating = 0}, ostack = {objects = 0x1814960, len = 0, size = 2048}, 
+  dstack = {objects = 0x1621600, len = 3, size = 4}, scanner = {jump_buffer = {
+      {__jmpbuf = {0, 0, 0, 0, 0, 0, 0, 0}, __mask_was_saved = 0, 
+        __saved_mask = {__val = {0 <repeats 16 times>}}}}, depth = 0, 
+    bind = 0, push = 0x7fffcc478340 <_scan_push>, 
+    execute = 0x7fffcc477a80 <_scan_execute>, closure = 0x0, buffer = {
+      base = 0x17bff40 "\230r\003\367\377\177", 
+      ptr = 0x17bff40 "\230r\003\367\377\177", end = 0x17c3f40 "з|\001", 
+      size = 16384}, procedure_stack = {objects = 0xe4f560, len = 0, 
+      size = 4}, build_procedure = {type = CSI_OBJECT_TYPE_NULL, datum = {
+        cr = 0x0, font_face = 0x0, pattern = 0x0, scaled_font = 0x0, 
+        surface = 0x0, array = 0x0, boolean = 0, object = 0x0, 
+        dictionary = 0x0, file = 0x0, integer = 0, matrix = 0x0, op = 0x0, 
+        name = 0, real = 0, string = 0x0, ptr = 0x0}}, accumulator = 0, 
+    accumulator_count = 0, line_number = 0}, perm_chunk = 0x16ded40, slabs = {{
+      chunk = 0x0, free_list = 0x0}, {chunk = 0x0, free_list = 0x0}, {
+      chunk = 0x1740480, free_list = 0x10e4b08}, {chunk = 0x0, 
+      free_list = 0x0}, {chunk = 0xf3aaa0, free_list = 0x0}, {chunk = 0x0, 
+      free_list = 0x0} <repeats 11 times>}, free_array = 0x0, 
+  free_dictionary = 0x0, free_string = 0x0, opcode = {0x0, 
+    0x7fffcc4712d0 <_mark>, 0x7fffcc477260 <end_dict_construction>, 
+    0x7fffcc474560 <end_array_construction>, 0x7fffcc472cb0 <_alpha>, 
+    0x7fffcc476ac0 <_add>, 0x7fffcc4704e0 <_add_color_stop>, 
+    0x7fffcc476340 <_and>, 0x7fffcc4703d0 <_arc>, 
+    0x7fffcc4702c0 <_arc_negative>, 0x7fffcc471680 <_array>, 
+    0x7fffcc46c8f0 <_bind>, 0x7fffcc46dd30 <_bitshift>, 
+    0x7fffcc470720 <_curve_to>, 0x7fffcc470b70 <_rel_curve_to>, 
+    0x7fffcc46bd70 <_clip>, 0x7fffcc46bd60 <_clip_preserve>, 
+    0x7fffcc46bd50 <_close_path>, 0x7fffcc473440 <_context>, 
+    0x7fffcc471790 <_copy>, 0x7fffcc46c7a0 <_copy_page>, 
+    0x7fffcc4770b0 <_cvi>, 0x7fffcc476ef0 <_cvr>, 0x7fffcc46dbd0 <_def>, 
+    0x7fffcc471580 <_dict>, 0x7fffcc476cd0 <_div>, 
+    0x7fffcc471700 <_duplicate>, 0x7fffcc4724c0 <_eq>, 0x7fffcc46bb10 <_exch>, 
+    0x7fffcc4713b0 <_false>, 0x7fffcc46bd40 <_fill>, 
+    0x7fffcc46bd30 <_fill_preserve>, 0x7fffcc476490 <_filter>, 
+    0x7fffcc4749d0 <_font>, 0x7fffcc4719a0 <_for>, 0x7fffcc472dc0 <_gray>, 
+    0x7fffcc472a80 <_ge>, 0x7fffcc4773d0 <_get>, 0x7fffcc471c20 <_glyph_path>, 
+    0x7fffcc472820 <_gt>, 0x7fffcc471600 <_identity>, 0x7fffcc46ec70 <_if>, 
+    0x7fffcc46fcd0 <_ifelse>, 0x7fffcc472ed0 <_image>, 
+    0x7fffcc472fd0 <_index>, 0x7fffcc46c040 <_integer>, 
+    0x7fffcc4730d0 <_invert>, 0x7fffcc46eb60 <_line_to>, 
+    0x7fffcc46f220 <_rel_line_to>, 0x7fffcc4726f0 <_le>, 
+    0x7fffcc473940 <_linear>, 0x7fffcc472950 <_lt>, 0x7fffcc46ea50 <_move_to>, 
+    0x7fffcc46f140 <_rel_move_to>, 0x7fffcc4746b0 <_map_to_image>, 
+    0x7fffcc46e8f0 <_mask>, 0x7fffcc474360 <_matrix>, 0x7fffcc471420 <_mesh>, 
+    0x7fffcc46c740 <_mesh_begin_patch>, 0x7fffcc46c6e0 <_mesh_end_patch>, 
+    0x7fffcc46fb10 <_mesh_set_control_point>, 
+    0x7fffcc470600 <_mesh_set_corner_color>, 0x7fffcc4731e0 <_mod>, 
+    0x7fffcc4766a0 <_mul>, 0x7fffcc46bd20 <_new_path>, 
+    0x7fffcc46bd10 <_new_sub_path>, 0x7fffcc4725d0 <_ne>, 
+    0x7fffcc46bfe0 <_neg>, 0x7fffcc46bf50 <_not>, 0x7fffcc471260 <_null>, 
+    0x7fffcc4761f0 <_or>, 0x7fffcc46bd00 <_paint>, 
+    0x7fffcc46e010 <_paint_with_alpha>, 0x7fffcc472bb0 <_pattern>, 
+    0x7fffcc46d710 <_pop>, 0x7fffcc4718d0 <_pop_group>, 
+    0x7fffcc46e330 <_push_group>, 0x7fffcc4741e0 <_radial>, 
+    0x7fffcc4735f0 <_record>, 0x7fffcc4701c0 <_rectangle>, 
+    0x7fffcc471130 <_repeat>, 0x7fffcc46bcf0 <_restore>, 
+    0x7fffcc46bce0 <_reset_clip>, 0x7fffcc473320 <_rgb>, 
+    0x7fffcc473a80 <_rgba>, 0x7fffcc46ed90 <_roll>, 0x7fffcc46f860 <_rotate>, 
+    0x7fffcc46bcd0 <_save>, 0x7fffcc46ff60 <_scale>, 
+    0x7fffcc474010 <_scaled_font>, 0x7fffcc46fbf0 <_select_font_face>, 
+    0x7fffcc46ef80 <_set>, 0x7fffcc46e1f0 <_set_antialias>, 
+    0x7fffcc470ed0 <_set_dash>, 0x7fffcc46f3e0 <_set_device_offset>, 
+    0x7fffcc46f4c0 <_set_device_scale>, 0x7fffcc46f5a0 <_set_extend>, 
+    0x7fffcc46f300 <_set_fallback_resolution>, 
+---Type <return> to continue, or q <return> to quit---
+    0x7fffcc46e150 <_set_fill_rule>, 0x7fffcc46f670 <_set_filter>, 
+    0x7fffcc46e700 <_set_font_face>, 0x7fffcc46f960 <_set_font_options>, 
+    0x7fffcc46ddf0 <_set_font_matrix>, 0x7fffcc46e0b0 <_set_font_size>, 
+    0x7fffcc46e290 <_set_line_cap>, 0x7fffcc46dcb0 <_set_line_join>, 
+    0x7fffcc46df70 <_set_line_width>, 0x7fffcc46ee70 <_set_matrix>, 
+    0x7fffcc46e5b0 <_set_miter_limit>, 0x7fffcc4708c0 <_set_mime_data>, 
+    0x7fffcc46e3d0 <_set_operator>, 0x7fffcc46dea0 <_set_scaled_font>, 
+    0x7fffcc46e650 <_set_source>, 0x7fffcc470cb0 <_set_source_image>, 
+    0x7fffcc46fa30 <_set_source_rgb>, 0x7fffcc4700c0 <_set_source_rgba>, 
+    0x7fffcc46e510 <_set_tolerance>, 0x7fffcc471e30 <_show_glyphs>, 
+    0x7fffcc46e7b0 <_show_text>, 0x7fffcc472040 <_show_text_glyphs>, 
+    0x7fffcc46c190 <_show_page>, 0x7fffcc473d00 <_similar>, 
+    0x7fffcc473bc0 <_similar_image>, 0x7fffcc4768b0 <_sub>, 
+    0x7fffcc473eb0 <_subsurface>, 0x7fffcc475a30 <_surface>, 
+    0x7fffcc46bcc0 <_stroke>, 0x7fffcc46bcb0 <_stroke_preserve>, 
+    0x7fffcc46e850 <_text_path>, 0x7fffcc46f740 <_transform>, 
+    0x7fffcc46fe00 <_translate>, 0x7fffcc471340 <_true>, 
+    0x7fffcc46db40 <_undef>, 0x7fffcc46e470 <_unmap_image>, 
+    0x7fffcc470ab0 <_unset>, 0x7fffcc46e9a0 <_write_to_png>, 
+    0x7fffcc4714a0 <_write_to_script>, 0x7fffcc4760a0 <_xor>, 
+    0x7fffcc46d760 <_debug_print>, 0x0 <repeats 117 times>}, _images = 0x0, 
+  _faces = 0x0}
+(gdb) p ct
+Display all 200 possibilities? (y or n)
+(gdb) p ctx.s
+scanner  slabs    status   strings  
+(gdb) p ctx.
+_faces           free_array       opcode           scanner
+_images          free_dictionary  ostack           slabs
+dstack           free_string      perm_chunk       status
+finished         hooks            ref_count        strings
+(gdb) p ctx.hooks 
+$3 = {closure = 0xce7250, 
+  surface_create = 0x7fffe004b420 <jlcapi_proto_surface_create_35250>, 
+  surface_destroy = 0x0, context_create = 0x0, context_destroy = 0x0, 
+  show_page = 0x0, copy_page = 0x0, create_source_image = 0x0}
+(gdb) disassemble 0x7fffe004b420
+Dump of assembler code for function jlcapi_proto_surface_create_35250:
+   0x00007fffe004b420 <+0>:     push   %r15
+   0x00007fffe004b422 <+2>:     push   %r14
+   0x00007fffe004b424 <+4>:     push   %rbx
+   0x00007fffe004b425 <+5>:     sub    $0x10,%rsp
+   0x00007fffe004b429 <+9>:     mov    %fs:0x0,%rax
+   0x00007fffe004b432 <+18>:    cmp    $0x2aa8,%rax
+   0x00007fffe004b438 <+24>:    lea    -0x2aa0(%rax),%rax
+   0x00007fffe004b43f <+31>:    setne  %r8b
+   0x00007fffe004b443 <+35>:    lea    0x8(%rsp),%r15
+   0x00007fffe004b448 <+40>:    cmovne %rax,%r15
+   0x00007fffe004b44c <+44>:    mov    (%r15),%r14
+   0x00007fffe004b44f <+47>:    test   %r14,%r14
+   0x00007fffe004b452 <+50>:    setne  %r9b
+   0x00007fffe004b456 <+54>:    movabs $0x7ffff7a9fae0,%rcx
+   0x00007fffe004b460 <+64>:    mov    (%rcx),%rcx
+   0x00007fffe004b463 <+67>:    movabs $0x7fffe7c61bd0,%rax
+   0x00007fffe004b46d <+77>:    mov    (%rax),%r10
+   0x00007fffe004b470 <+80>:    cmp    %rcx,%r10
+   0x00007fffe004b473 <+83>:    mov    %r10,%rax
+   0x00007fffe004b476 <+86>:    cmovae %rcx,%rax
+   0x00007fffe004b47a <+90>:    test   %r9b,%r8b
+   0x00007fffe004b47d <+93>:    cmovne %rcx,%rax
+   0x00007fffe004b481 <+97>:    movabs $0x7fffe004b4c0,%rbx
+   0x00007fffe004b48b <+107>:   movabs $0x7fffe004b6a0,%r8
+   0x00007fffe004b495 <+117>:   cmove  %r8,%rbx
+   0x00007fffe004b499 <+121>:   cmp    %rcx,%r10
+   0x00007fffe004b49c <+124>:   mov    %rax,(%r15)
+   0x00007fffe004b49f <+127>:   cmovae %r8,%rbx
+   0x00007fffe004b4a3 <+131>:   callq  *%rbx
+   0x00007fffe004b4a5 <+133>:   mov    %r14,(%r15)
+   0x00007fffe004b4a8 <+136>:   add    $0x10,%rsp
+   0x00007fffe004b4ac <+140>:   pop    %rbx
+      0x00007fffe004b4ad <+141>:   pop    %r14
+   0x00007fffe004b4af <+143>:   pop    %r15
+   0x00007fffe004b4b1 <+145>:   retq   
+End of assembler dump.
+(gdb) s
+552         if (ctx->status)
+(gdb) s
+554         if (ctx->finished)
+(gdb) s
+557         ctx->status = csi_file_new (ctx, &file, filename, "r");
+(gdb) s
+csi_file_new (ctx=0x1634230, obj=obj@entry=0x7fffffffd020, 
+    path=0x7fffe6561758 "../juliapackages/CairoScript/data/a1.cs", 
+    mode=mode@entry=0x7fffcc47aee4 "r") at cairo-script-file.c:56
+56      {
+(gdb) s
+59          file = _csi_slab_alloc (ctx, sizeof (csi_file_t));
+(gdb) c
+Continuing.
+0x0000000000000000
+
+julia> using Pkg
+
+julia> Pkg.test("CairoScript")
+   Testing CairoScript
+ Resolving package versions...
+    Status `/tmp/tmpKh5dsU/Manifest.toml`
+  [9e28174c] BinDeps v0.8.10
+  [b99e7846] BinaryProvider v0.5.3
+  [e1450e63] BufferedStreams v1.0.0
+  [159f3aea] Cairo v0.5.6+ [`~/.julia/dev/Cairo`]
+  [22972aad] CairoScript v0.0.0 [`~/juliapackages/CairoScript`]
+  [3da002f7] ColorTypes v0.7.5
+  [5ae59095] Colors v0.9.5
+  [34da2185] Compat v1.4.0
+  [53c48c17] FixedPointNumbers v0.5.3
+  [a2bd30eb] Graphics v0.4.0
+  [0862f596] HTTPClient v0.2.1+ [`~/.julia/dev/HTTPClient`]
+  [d9be37ee] Homebrew v0.7.0
+  [682c06a0] JSON v0.20.0
+  [b27032c2] LibCURL v0.4.1
+  [522f3ed2] LibExpat v0.5.0
+  [2ec943e9] Libz v1.0.0
+  [77ba4419] NaNMath v0.3.2
+  [189a3867] Reexport v0.2.0
+  [30578b45] URIParser v0.4.0
+  [c17dfb99] WinRPM v0.4.2
+  [2a0f44e3] Base64  [`@stdlib/Base64`]
+  [ade2ca70] Dates  [`@stdlib/Dates`]
+  [8bb1440f] DelimitedFiles  [`@stdlib/DelimitedFiles`]
+  [8ba89e20] Distributed  [`@stdlib/Distributed`]
+  [b77e0a4c] InteractiveUtils  [`@stdlib/InteractiveUtils`]
+  [76f85450] LibGit2  [`@stdlib/LibGit2`]
+  [8f399da3] Libdl  [`@stdlib/Libdl`]
+  [37e2e46d] LinearAlgebra  [`@stdlib/LinearAlgebra`]  [56ddb016] Logging  [`@stdlib/Logging`]
+  [d6f4376e] Markdown  [`@stdlib/Markdown`]
+  [a63ad114] Mmap  [`@stdlib/Mmap`]
+  [44cfe95a] Pkg  [`@stdlib/Pkg`]
+  [de0858da] Printf  [`@stdlib/Printf`]
+  [3fa0cd96] REPL  [`@stdlib/REPL`]
+  [9a3f8284] Random  [`@stdlib/Random`]
+  [ea8e919c] SHA  [`@stdlib/SHA`]
+  [9e88b42a] Serialization  [`@stdlib/Serialization`]
+  [1a1011a3] SharedArrays  [`@stdlib/SharedArrays`]
+  [6462fe0b] Sockets  [`@stdlib/Sockets`]
+  [2f01184e] SparseArrays  [`@stdlib/SparseArrays`]
+  [10745b16] Statistics  [`@stdlib/Statistics`]
+  [8dfed614] Test  [`@stdlib/Test`]
+  [cf7118a7] UUIDs  [`@stdlib/UUIDs`]
+  [4ec0a83e] Unicode  [`@stdlib/Unicode`]
+Test Summary:   | Pass  Total
+Interpreter Run |    6      6
+Content Test: Error During Test at /home/lobi/juliapackages/CairoScript/test/runtests.jl:90
+  Got exception outside of a @test
+  MethodError: Cannot `convert` an object of type Base.RefValue{Ptr{Nothing}} to an object of type Ptr{Nothing}
+  Closest candidates are:
+    convert(::Type{Ptr{T}}, !Matched::Union{Int64, UInt64}) where T at pointer.jl:26
+    convert(::Type{Ptr{T}}, !Matched::Ptr{T}) where T at pointer.jl:29
+    convert(::Type{Ptr{T}}, !Matched::Ptr) where T at pointer.jl:30
+    ...
+  Stacktrace:
+   [1] (::getfield(CairoScript, Symbol("##InterpreterHooks#1#2")))(::Ptr{Nothing}, ::Base.RefValue{Ptr{Nothing}}, ::Ptr{Nothing}, ::Ptr{Nothing}, ::Ptr{Nothing}, ::Ptr{Nothing}, ::Ptr{Nothing}, ::Ptr{Nothing}, ::Type) at /home/lobi/juliapackages/CairoScript/src/types.jl:58
+   [2] (::getfield(Core, Symbol("#kw#Type")))(::NamedTuple{(:closure, :surface_create),Tuple{Ptr{Nothing},Base.RefValue{Ptr{Nothing}}}}, ::Type{CairoScript.InterpreterHooks}) at ./none:0
+   [3] macro expansion at /home/lobi/juliapackages/CairoScript/test/runtests.jl:115 [inlined]
+   [4] macro expansion at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Test/src/Test.jl:1083 [inlined]
+   [5] top-level scope at /home/lobi/juliapackages/CairoScript/test/runtests.jl:93
+   [6] include at ./boot.jl:317 [inlined]
+   [7] include_relative(::Module, ::String) at ./loading.jl:1044
+   [8] include(::Module, ::String) at ./sysimg.jl:29
+   [9] include(::String) at ./client.jl:392
+   [10] top-level scope at none:0
+   [11] eval(::Module, ::Any) at ./boot.jl:319
+   [12] macro expansion at ./logging.jl:317 [inlined]
+   [13] exec_options(::Base.JLOptions) at ./client.jl:219
+   [14] _start() at ./client.jl:425
+Test Summary: | Pass  Error  Total
+Content Test  |    3      1      4
+ERROR: LoadError: Some tests did not pass: 3 passed, 0 failed, 1 errored, 0 broken.
+in expression starting at /home/lobi/juliapackages/CairoScript/test/runtests.jl:90
+ERROR: Package CairoScript errored during testing
+Stacktrace: [1] pkgerror(::String, ::Vararg{String,N} where N) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/Types.jl:120
+ [2] macro expansion at ./logging.jl:311 [inlined]
+ [3] #test#65(::Bool, ::Function, ::Pkg.Types.Context, ::Array{Pkg.Types.PackageSpec,1}) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/Operations.jl:1321
+ [4] #test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:0 [inlined]
+ [5] #test#42(::Bool, ::Base.Iterators.Pairs{Union{},Union{},Tuple{},NamedTuple{(),Tuple{}}}, ::Function, ::Pkg.Types.Context, ::Array{Pkg.Types.PackageSpec,1}) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:273
+ [6] test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:258 [inlined]
+ [7] #test#41 at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:255 [inlined]
+ [8] test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:255 [inlined]
+ [9] #test#40 at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:254 [inlined]
+ [10] test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:254 [inlined]
+ [11] #test#39 at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:253 [inlined]
+ [12] test(::String) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:253
+ [13] top-level scope at none:0
+
+(v1.0) pkg> st
+    Status `~/.julia/environments/v1.0/Project.toml`
+  [159f3aea] Cairo v0.5.6+ [`~/.julia/dev/Cairo`]
+  [22972aad] CairoScript v0.0.0 [`../../../juliapackages/CairoScript`]
+  [5ae59095] Colors v0.9.5
+  [34da2185] Compat v1.4.0
+  [a0b5b9ef] Cxx v0.2.0+ #master (https://github.com/Keno/Cxx.jl.git)
+  [186bb1d3] Fontconfig v0.2.0+ [`~/.julia/dev/Fontconfig`]
+  [a2bd30eb] Graphics v0.4.0
+  [4c0ca9eb] Gtk v0.16.4
+  [0862f596] HTTPClient v0.2.1+ [`~/.julia/dev/HTTPClient`]
+  [522f3ed2] LibExpat v0.5.0
+  [c4c386cf] Rsvg v0.2.3+ [`~/.julia/dev/Rsvg`]
+  [c17dfb99] WinRPM v0.4.2
+
+(v1.0) pkg> 
+
+Thread 1 "julia" received signal SIGSEGV, Segmentation fault.
+malloc_consolidate (av=av@entry=0x7ffff7036b20 <main_arena>) at malloc.c:4175
+4175    malloc.c: No such file or directory.
+(gdb) quit
+A debugging session is active.
+
+        Inferior 1 [process 7485] will be killed.
+
+Quit anyway? (y or n) y
+lobi@orange4:~/default$ ../julia-1.0.2/bin/julia 
+               _
+   _       _ _(_)_     |  Documentation: https://docs.julialang.org
+  (_)     | (_) (_)    |
+   _ _   _| |_  __ _   |  Type "?" for help, "]?" for Pkg help.
+  | | | | | | |/ _` |  |
+  | | |_| | | | (_| |  |  Version 1.0.2 (2018-11-08)
+ _/ |\__'_|_|_|\__'_|  |  Official https://julialang.org/ release
+|__/                   |
+
+julia> using Pkg
+
+julia> Pkg.test("CairoScript")
+   Testing CairoScript
+ Resolving package versions...
+    Status `/tmp/tmpMBwSgv/Manifest.toml`
+  [9e28174c] BinDeps v0.8.10
+  [b99e7846] BinaryProvider v0.5.3
+  [e1450e63] BufferedStreams v1.0.0
+  [159f3aea] Cairo v0.5.6+ [`~/.julia/dev/Cairo`]
+  [22972aad] CairoScript v0.0.0 [`~/juliapackages/CairoScript`]
+  [3da002f7] ColorTypes v0.7.5
+  [5ae59095] Colors v0.9.5
+  [34da2185] Compat v1.4.0
+  [53c48c17] FixedPointNumbers v0.5.3
+  [a2bd30eb] Graphics v0.4.0
+  [0862f596] HTTPClient v0.2.1+ [`~/.julia/dev/HTTPClient`]
+  [d9be37ee] Homebrew v0.7.0
+  [682c06a0] JSON v0.20.0
+  [b27032c2] LibCURL v0.4.1
+  [522f3ed2] LibExpat v0.5.0
+  [2ec943e9] Libz v1.0.0
+  [77ba4419] NaNMath v0.3.2
+  [189a3867] Reexport v0.2.0
+  [30578b45] URIParser v0.4.0
+  [c17dfb99] WinRPM v0.4.2
+  [2a0f44e3] Base64  [`@stdlib/Base64`]
+  [ade2ca70] Dates  [`@stdlib/Dates`]
+  [8bb1440f] DelimitedFiles  [`@stdlib/DelimitedFiles`]
+  [8ba89e20] Distributed  [`@stdlib/Distributed`]
+  [b77e0a4c] InteractiveUtils  [`@stdlib/InteractiveUtils`]
+  [76f85450] LibGit2  [`@stdlib/LibGit2`]
+  [8f399da3] Libdl  [`@stdlib/Libdl`]
+  [37e2e46d] LinearAlgebra  [`@stdlib/LinearAlgebra`]
+  [56ddb016] Logging  [`@stdlib/Logging`]
+  [d6f4376e] Markdown  [`@stdlib/Markdown`]
+  [a63ad114] Mmap  [`@stdlib/Mmap`]
+  [44cfe95a] Pkg  [`@stdlib/Pkg`]
+  [de0858da] Printf  [`@stdlib/Printf`]
+  [3fa0cd96] REPL  [`@stdlib/REPL`]
+  [9a3f8284] Random  [`@stdlib/Random`]
+  [ea8e919c] SHA  [`@stdlib/SHA`]
+  [9e88b42a] Serialization  [`@stdlib/Serialization`]
+  [1a1011a3] SharedArrays  [`@stdlib/SharedArrays`]
+  [6462fe0b] Sockets  [`@stdlib/Sockets`]
+  [2f01184e] SparseArrays  [`@stdlib/SparseArrays`]
+  [10745b16] Statistics  [`@stdlib/Statistics`]
+  [8dfed614] Test  [`@stdlib/Test`]
+  [cf7118a7] UUIDs  [`@stdlib/UUIDs`]
+  [4ec0a83e] Unicode  [`@stdlib/Unicode`]
+Test SumContent Test: Error During Test at /home/lobi/juliapackages/CairoScript/test/runtests.jl:90
+  Got exception outside of a @test
+  MethodError: Cannot `convert` an object of type Base.RefValue{Ptr{Nothing}} to an object of type Ptr{Nothing}
+  Closest candidates are:
+    convert(::Type{Ptr{T}}, !Matched::Union{Int64, UInt64}) where T at pointer.jl:26
+    convert(::Type{Ptr{T}}, !Matched::Ptr{T}) where T at pointer.jl:29
+    convert(::Type{Ptr{T}}, !Matched::Ptr) where T at pointer.jl:30
+    ...
+  Stacktrace:
+   [1] (::getfield(CairoScript, Symbol("##InterpreterHooks#1#2")))(::Ptr{Nothing}, ::Base.RefValue{Ptr{Nothing}}, ::Ptr{Nothing}, ::Ptr{Nothing}, ::Ptr{Nothing}, ::Ptr{Nothing}, ::Ptr{Nothing}, ::Ptr{Nothing}, ::Type) at /home/lobi/juliapackages/CairoScript/src/types.jl:58
+   [2] (::getfield(Core, Symbol("#kw#Type")))(::NamedTuple{(:closure, :surface_create),Tuple{Ptr{Nothing},Base.RefValue{Ptr{Nothing}}}}, ::Type{CairoScript.InterpreterHooks}) at ./none:0
+   [3] macro expansion at /home/lobi/juliapackages/CairoScript/test/runtests.jl:115 [inlined]
+   [4] macro expansion at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Test/src/Test.jl:1083 [inlined]
+   [5] top-level scope at /home/lobi/juliapackages/CairoScript/test/runtests.jl:93
+   [6] include at ./boot.jl:317 [inlined]
+   [7] include_relative(::Module, ::String) at ./loading.jl:1044
+   [8] include(::Module, ::String) at ./sysimg.jl:29
+   [9] include(::String) at ./client.jl:392
+   [10] top-level scope at none:0
+   [11] eval(::Module, ::Any) at ./boot.jl:319
+   [12] macro expansion at ./logging.jl:317 [inlined]
+   [13] exec_options(::Base.JLOptions) at ./client.jl:219
+   [14] _start() at ./client.jl:425
+Test Summary: | Pass  Error  Total
+Content Test  |    3      1      4
+ERROR: LoadError: Some tests did not pass: 3 passed, 0 failed, 1 errored, 0 broken.
+in expression starting at /home/lobi/juliapackages/CairoScript/test/runtests.jl:90
+ERROR: Package CairoScript errored during testing
+Stacktrace:
+ [1] pkgerror(::String, ::Vararg{String,N} where N) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/Types.jl:120
+ [2] macro expansion at ./logging.jl:311 [inlined]
+ [3] #test#65(::Bool, ::Function, ::Pkg.Types.Context, ::Array{Pkg.Types.PackageSpec,1}) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/Operations.jl:1321
+ [4] #test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:0 [inlined]
+ [5] #test#42(::Bool, ::Base.Iterators.Pairs{Union{},Union{},Tuple{},NamedTuple{(),Tuple{}}}, ::Function, ::Pkg.Types.Context, ::Array{Pkg.Types.PackageSpec,1}) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:273
+ [6] test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:258 [inlined]
+ [7] #test#41 at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:255 [inlined]
+ [8] test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:255 [inlined]
+ [9] #test#40 at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:254 [inlined]
+ [10] test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:254 [inlined]
+ [11] #test#39 at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:253 [inlined]
+ [12] test(::String) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:253
+mary:   | Pass  Total
+Interpreter Run |    6      6
+ [13] top-level scope at none:0
+
+julia> 
+
+julia> Pkg.test("CairoScript")
+   Testing CairoScript
+ Resolving package versions...
+    Status `/tmp/tmpVW0k4i/Manifest.toml`
+  [9e28174c] BinDeps v0.8.10
+  [b99e7846] BinaryProvider v0.5.3
+  [e1450e63] BufferedStreams v1.0.0
+  [159f3aea] Cairo v0.5.6+ [`~/.julia/dev/Cairo`]
+  [22972aad] CairoScript v0.0.0 [`~/juliapackages/CairoScript`]
+  [3da002f7] ColorTypes v0.7.5
+  [5ae59095] Colors v0.9.5
+  [34da2185] Compat v1.4.0
+  [53c48c17] FixedPointNumbers v0.5.3
+  [a2bd30eb] Graphics v0.4.0
+  [0862f596] HTTPClient v0.2.1+ [`~/.julia/dev/HTTPClient`]
+  [d9be37ee] Homebrew v0.7.0
+  [682c06a0] JSON v0.20.0
+  [b27032c2] LibCURL v0.4.1
+  [522f3ed2] LibExpat v0.5.0
+  [2ec943e9] Libz v1.0.0
+  [77ba4419] NaNMath v0.3.2
+  [189a3867] Reexport v0.2.0
+  [30578b45] URIParser v0.4.0
+  [c17dfb99] WinRPM v0.4.2
+  [2a0f44e3] Base64  [`@stdlib/Base64`]
+  [ade2ca70] Dates  [`@stdlib/Dates`]
+  [8bb1440f] DelimitedFiles  [`@stdlib/DelimitedFiles`]
+  [8ba89e20] Distributed  [`@stdlib/Distributed`]
+  [b77e0a4c] InteractiveUtils  [`@stdlib/InteractiveUtils`]
+  [76f85450] LibGit2  [`@stdlib/LibGit2`]
+  [8f399da3] Libdl  [`@stdlib/Libdl`]
+  [37e2e46d] LinearAlgebra  [`@stdlib/LinearAlgebra`]
+  [56ddb016] Logging  [`@stdlib/Logging`]
+  [d6f4376e] Markdown  [`@stdlib/Markdown`]
+  [a63ad114] Mmap  [`@stdlib/Mmap`]
+  [44cfe95a] Pkg  [`@stdlib/Pkg`]
+  [de0858da] Printf  [`@stdlib/Printf`]
+  [3fa0cd96] REPL  [`@stdlib/REPL`]
+  [9a3f8284] Random  [`@stdlib/Random`]
+  [ea8e919c] SHA  [`@stdlib/SHA`]
+  [9e88b42a] Serialization  [`@stdlib/Serialization`]
+  [1a1011a3] SharedArrays  [`@stdlib/SharedArrays`]
+  [6462fe0b] Sockets  [`@stdlib/Sockets`]
+  [2f01184e] SparseArrays  [`@stdlib/SparseArrays`]
+  [10745b16] Statistics  [`@stdlib/Statistics`]
+  [8dfed614] Test  [`@stdlib/Test`]
+  [cf7118a7] UUIDs  [`@stdlib/UUIDs`]
+    [4ec0a83e] Unicode  [`@stdlib/Unicode`]
+
+signal (11): Segmentation fault
+in expression starting at /home/lobi/juliapackages/CairoScript/test/runtests.jl:17
+unknown function (ip: 0x7f87c0923890)
+unknown function (ip: 0x2dbf49f)
+Allocations: 5944226 (Pool: 5943045; Big: 1181); GC: 12
+ERROR: Package CairoScript errored during testing
+Stacktrace:
+ [1] pkgerror(::String, ::Vararg{String,N} where N) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/Types.jl:120
+ [2] macro expansion at ./logging.jl:311 [inlined]
+ [3] #test#65(::Bool, ::Function, ::Pkg.Types.Context, ::Array{Pkg.Types.PackageSpec,1}) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/Operations.jl:1321
+ [4] #test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:0 [inlined]
+ [5] #test#42(::Bool, ::Base.Iterators.Pairs{Union{},Union{},Tuple{},NamedTuple{(),Tuple{}}}, ::Function, ::Pkg.Types.Context, ::Array{Pkg.Types.PackageSpec,1}) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:273
+ [6] test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:258 [inlined]
+ [7] #test#41 at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:255 [inlined]
+ [8] test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:255 [inlined]
+ [9] #test#40 at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:254 [inlined]
+ [10] test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:254 [inlined]
+ [11] #test#39 at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:253 [inlined]
+ [12] test(::String) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:253
+ [13] top-level scope at none:0
+
+julia> Pkg.test("CairoScript")
+   Testing CairoScript
+ Resolving package versions...
+    Status `/tmp/tmpfroVs8/Manifest.toml`
+  [9e28174c] BinDeps v0.8.10
+  [b99e7846] BinaryProvider v0.5.3
+  [e1450e63] BufferedStreams v1.0.0
+  [159f3aea] Cairo v0.5.6+ [`~/.julia/dev/Cairo`]
+  [22972aad] CairoScript v0.0.0 [`~/juliapackages/CairoScript`]
+  [3da002f7] ColorTypes v0.7.5
+  [5ae59095] Colors v0.9.5
+  [34da2185] Compat v1.4.0
+  [53c48c17] FixedPointNumbers v0.5.3
+  [a2bd30eb] Graphics v0.4.0
+  [0862f596] HTTPClient v0.2.1+ [`~/.julia/dev/HTTPClient`]
+  [d9be37ee] Homebrew v0.7.0
+  [682c06a0] JSON v0.20.0
+  [b27032c2] LibCURL v0.4.1
+  [522f3ed2] LibExpat v0.5.0
+  [2ec943e9] Libz v1.0.0
+  [77ba4419] NaNMath v0.3.2
+  [189a3867] Reexport v0.2.0
+  [30578b45] URIParser v0.4.0
+  [c17dfb99] WinRPM v0.4.2
+  [2a0f44e3] Base64  [`@stdlib/Base64`]
+  [ade2ca70] Dates  [`@stdlib/Dates`]
+  [8bb1440f] DelimitedFiles  [`@stdlib/DelimitedFiles`]
+    [b77e0a4c] InteractiveUtils  [`@stdlib/InteractiveUtils`]
+  [76f85450] LibGit2  [`@stdlib/LibGit2`]
+  [8f399da3] Libdl  [`@stdlib/Libdl`]
+  [37e2e46d] LinearAlgebra  [`@stdlib/LinearAlgebra`]
+  [56ddb016] Logging  [`@stdlib/Logging`]
+  [d6f4376e] Markdown  [`@stdlib/Markdown`]
+  [a63ad114] Mmap  [`@stdlib/Mmap`]
+  [44cfe95a] Pkg  [`@stdlib/Pkg`]
+  [de0858da] Printf  [`@stdlib/Printf`]
+  [3fa0cd96] REPL  [`@stdlib/REPL`]
+  [9a3f8284] Random  [`@stdlib/Random`]
+  [ea8e919c] SHA  [`@stdlib/SHA`]
+  [9e88b42a] Serialization  [`@stdlib/Serialization`]
+  [1a1011a3] SharedArrays  [`@stdlib/SharedArrays`]
+  [6462fe0b] Sockets  [`@stdlib/Sockets`]
+  [2f01184e] SparseArrays  [`@stdlib/SparseArrays`]
+  [10745b16] Statistics  [`@stdlib/Statistics`]
+  [8dfed614] Test  [`@stdlib/Test`]
+  [cf7118a7] UUIDs  [`@stdlib/UUIDs`]
+  [4ec0a83e] Unicode  [`@stdlib/Unicode`]
+julia: ../../../../src/cairo-surface.c:928: cairo_surface_reference: Assertion `(_cairo_atomic_int_get (&(&surface->ref_count)->ref_count) > 0)' failed.
+
+signal (6): Aborted
+in expression starting at /home/lobi/juliapackages/CairoScript/test/runtests.jl:17
+raise at /build/glibc-Cl5G7W/glibc-2.23/signal/../sysdeps/unix/sysv/linux/raise.c:54
+abort at /build/glibc-Cl5G7W/glibc-2.23/stdlib/abort.c:89
+__assert_fail_base at /build/glibc-Cl5G7W/glibc-2.23/assert/assert.c:92
+__assert_fail at /build/glibc-Cl5G7W/glibc-2.23/assert/assert.c:101
+cairo_surface_reference at /usr/lib/x86_64-linux-gnu/libcairo.so (unknown line)
+cairo_surface_finish at /usr/lib/x86_64-linux-gnu/libcairo.so (unknown line)
+finish at /home/lobi/.julia/dev/Cairo/src/Cairo.jl:241
+jl_fptr_trampoline at /buildworker/worker/package_linux64/build/src/gf.c:1831
+jl_apply_generic at /buildworker/worker/package_linux64/build/src/gf.c:2184
+macro expansion at /home/lobi/juliapackages/CairoScript/test/runtests.jl:30 [inlined]
+macro expansion at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Test/src/Test.jl:1083 [inlined]
+top-level scope at /home/lobi/juliapackages/CairoScript/test/runtests.jl:20
+jl_fptr_trampoline at /buildworker/worker/package_linux64/build/src/gf.c:1831
+jl_toplevel_eval_flex at /buildworker/worker/package_linux64/build/src/toplevel.c:799
+jl_parse_eval_all at /buildworker/worker/package_linux64/build/src/ast.c:838
+jl_load at /buildworker/worker/package_linux64/build/src/toplevel.c:839
+include at ./boot.jl:317 [inlined]
+include_relative at ./loading.jl:1044
+include at ./sysimg.jl:29
+jl_apply_generic at /buildworker/worker/package_linux64/build/src/gf.c:2184
+include at ./client.jl:392
+jl_fptr_trampoline at /buildworker/worker/package_linux64/build/src/gf.c:1831
+jl_apply_generic at /buildworker/worker/package_linux64/build/src/gf.c:2184
+do_call at /buildworker/worker/package_linux64/build/src/interpreter.c:324
+eval_value at /buildworker/worker/package_linux64/build/src/interpreter.c:430
+eval_stmt_value at /buildworker/worker/package_linux64/build/src/interpreter.c:363 [inlined]
+eval_body at /buildworker/worker/package_linux64/build/src/interpreter.c:682
+jl_interpret_toplevel_thunk_callback at /buildworker/worker/package_linux64/build/src/interpreter.c:806
+unknown function (ip: 0xfffffffffffffffe)
+unknown function (ip: 0x7f48e42279df)
+unknown function (ip: 0xffffffffffffffff)
+jl_interpret_toplevel_thunk at /buildworker/worker/package_linux64/build/src/interpreter.c:815
+jl_toplevel_eval_flex at /buildworker/worker/package_linux64/build/src/toplevel.c:805
+jl_toplevel_eval_flex at /buildworker/worker/package_linux64/build/src/toplevel.c:754
+jl_toplevel_eval_in at /buildworker/worker/package_linux64/build/src/builtins.c:622
+eval at ./boot.jl:319
+jl_apply_generic at /buildworker/worker/package_linux64/build/src/gf.c:2184
+macro expansion at ./logging.jl:317 [inlined]
+exec_options at ./client.jl:219
+_start at ./client.jl:425
+jl_apply_generic at /buildworker/worker/package_linux64/build/src/gf.c:2184
+jl_apply at /buildworker/worker/package_linux64/build/ui/../src/julia.h:1537 [inlined]
+true_main at /buildworker/worker/package_linux64/build/ui/repl.c:112
+main at /buildworker/worker/package_linux64/build/ui/repl.c:233
+__libc_start_main at /build/glibc-Cl5G7W/glibc-2.23/csu/../csu/libc-start.c:291
+_start at /home/lobi/julia-1.0.2/bin/julia (unknown line)
+Allocations: 5944226 (Pool: 5943045; Big: 1181); GC: 12
+ERROR: Package CairoScript errored during testing
+Stacktrace:
+ [1] pkgerror(::String, ::Vararg{String,N} where N) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/Types.jl:120
+ [2] macro expansion at ./logging.jl:311 [inlined]
+ [3] #test#65(::Bool, ::Function, ::Pkg.Types.Context, ::Array{Pkg.Types.PackageSpec,1}) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/Operations.jl:1321
+ [4] #test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:0 [inlined]
+ [5] #test#42(::Bool, ::Base.Iterators.Pairs{Union{},Union{},Tuple{},NamedTuple{(),Tuple{}}}, ::Function, ::Pkg.Types.Context, ::Array{Pkg.Types.PackageSpec,1}) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:273
+ [6] test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:258 [inlined]
+ [7] #test#41 at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:255 [inlined]
+ [8] test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:255 [inlined]
+ [9] #test#40 at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:254 [inlined]
+ [10] test at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:254 [inlined]
+ [11] #test#39 at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:253 [inlined]
+ [12] test(::String) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.0/Pkg/src/API.jl:253
+ [13] top-level scope at none:0
+
+julia> 
+lobi@orange4:~/default$ ../julia-1.0.2/bin/julia 
+
