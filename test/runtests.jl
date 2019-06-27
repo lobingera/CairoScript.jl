@@ -6,12 +6,8 @@ import Compat.String
 
 @compat import Base.show
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+
+using Test
 
 include("test_painting.jl")
 
@@ -20,19 +16,27 @@ pkg_dir = dirname(dirname(@__FILE__))
 # Image Surface
 @testset "Interpreter Run" begin
 
+
+    
     # run a script that includes a writing operation
     surf = CairoImageSurface(256, 256, Cairo.FORMAT_ARGB32)
+    GC.@preserve surf begin
     testfile = joinpath(pkg_dir,"data","a1.cs");
 
     h = CairoScript.InterpreterHooks()
-    h.surface_create = CairoScript.surf_create_c
+    h.surface_create = CairoScript.surf_create_c[]
     h.closure = surf.ptr
     c = CairoScript.Interpreter()
     c = CairoScript.interpreter_install_hooks(c,h)
-    status = CairoScript.interpreter_run(c,testfile)
+
+    
+        status = CairoScript.interpreter_run(c,testfile)
+    
     @test status == 0
     finish(surf)
     surf.ptr = C_NULL;
+    end
+
     outputfile = "out.png"
     @test isfile(outputfile)
     rm(outputfile)
@@ -43,11 +47,16 @@ pkg_dir = dirname(dirname(@__FILE__))
     testfile = joinpath(pkg_dir,"data","a2.cs");
 
     h = CairoScript.InterpreterHooks()
-    h.surface_create = CairoScript.surf_create_c
+    h.surface_create = CairoScript.surf_create_c[]
     h.closure = surf.ptr
+    
     c = CairoScript.Interpreter()
     c = CairoScript.interpreter_install_hooks(c,h)
-    status = CairoScript.interpreter_run(c,testfile)
+
+    GC.@preserve c begin
+        status = CairoScript.interpreter_run(c,testfile)
+    end
+
     @test status == 0
 
     outputfile = "out.png"
@@ -72,11 +81,15 @@ stroke
 """
 
     h = CairoScript.InterpreterHooks()
-    h.surface_create = CairoScript.surf_create_c
+    h.surface_create = CairoScript.surf_create_c[]
     h.closure = surf.ptr
     c = CairoScript.Interpreter()
     c = CairoScript.interpreter_install_hooks(c,h)
-    status = CairoScript.interpreter_feed_string(c,testdata)
+    GC.@preserve c begin
+        status = CairoScript.interpreter_feed_string(c,testdata)
+    end
+
+
     #display(testdata)
     @test status == 0
 
@@ -97,11 +110,15 @@ end
     testfile = joinpath(pkg_dir,"data","a2.cs");
 
     h = CairoScript.InterpreterHooks()
-    h.surface_create = CairoScript.surf_create_c
+    h.surface_create = CairoScript.surf_create_c[]
     h.closure = surf.ptr
     c = CairoScript.Interpreter()
     c = CairoScript.interpreter_install_hooks(c,h)
-    status = CairoScript.interpreter_run(c,testfile)
+
+    GC.@preserve c begin
+        status = CairoScript.interpreter_run(c,testfile)
+    end
+
     @test status == 0
     
     d = simple_hist(matrix_read(surf))
@@ -115,10 +132,15 @@ end
     # short setup, same data and test
     surf = CairoImageSurface(256, 256, Cairo.FORMAT_ARGB32)
     testfile = joinpath(pkg_dir,"data","a2.cs");
-    c = CairoScript.Interpreter(
-        CairoScript.InterpreterHooks(
-            closure = surf.ptr, surface_create = CairoScript.surf_create_c))
-    status = CairoScript.interpreter_run(c,testfile)
+    h = CairoScript.InterpreterHooks(
+            closure = surf.ptr, surface_create = CairoScript.surf_create_c[])
+
+    c = CairoScript.Interpreter()
+    c = CairoScript.interpreter_install_hooks(c,h)    
+
+    GC.@preserve c begin
+        status = CairoScript.interpreter_run(c,testfile)
+    end
 
     @test status == 0
     

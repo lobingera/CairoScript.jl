@@ -1,16 +1,16 @@
-type csi_t
+mutable struct csi_t
     ref_count::Int64
     status::Int32
     finished::UInt32
-    hooks::Ptr{Void}
+    hooks::Ptr{Nothing}
 end
 
-type Interpreter <: GraphicsDevice
+mutable struct Interpreter <: GraphicsDevice
     ptr::Ptr{csi_t}
 
-    function Interpreter(ptr::Ptr{Void})
+    function Interpreter(ptr::Ptr{Nothing})
         self = new(ptr)
-        finalizer(self, destroy)
+        finalizer(destroy, self)
         self
     end
 end
@@ -19,30 +19,30 @@ function destroy(csi::Interpreter)
     if csi.ptr == C_NULL
         return
     end
-    ccall((:cairo_script_interpreter_destroy,_jl_libcsi), Void, (Ptr{Void},), csi.ptr)
+    ccall((:cairo_script_interpreter_destroy,_jl_libcsi), Nothing, (Ptr{Nothing},), csi.ptr)
     csi.ptr = C_NULL
     nothing
 end
 
 function Interpreter()
     ptr = ccall((:cairo_script_interpreter_create,_jl_libcsi),
-                Ptr{Void},())
+                Ptr{Nothing},())
     Interpreter(ptr)
 end
 
-type cl <: GraphicsDevice
+mutable struct cl <: GraphicsDevice
     s::CairoSurface
 end
 
-type InterpreterHooks <: GraphicsDevice
-	closure::Ptr{Void} 
-	surface_create::Ptr{Void} 
-	surface_destroy::Ptr{Void}
-	context_create::Ptr{Void} 
-	context_destroy::Ptr{Void}
-	show_page::Ptr{Void} 
-	copy_page::Ptr{Void} 
-	create_source_image::Ptr{Void} 
+mutable struct InterpreterHooks <: GraphicsDevice
+	closure::Ptr{Nothing} 
+	surface_create::Ptr{Nothing} 
+	surface_destroy::Ptr{Nothing}
+	context_create::Ptr{Nothing} 
+	context_destroy::Ptr{Nothing}
+	show_page::Ptr{Nothing} 
+	copy_page::Ptr{Nothing} 
+	create_source_image::Ptr{Nothing} 
 
 	function InterpreterHooks(;
                 closure = C_NULL, 
@@ -54,7 +54,7 @@ type InterpreterHooks <: GraphicsDevice
                 copy_page = C_NULL, 
                 create_source_image = C_NULL)
 
-		#self = new(cl(CairoSurface(Ptr{Void}(0))),C_NULL,C_NULL,C_NULL,C_NULL,C_NULL,C_NULL,C_NULL)
+		#self = new(cl(CairoSurface(Ptr{Nothing}(0))),C_NULL,C_NULL,C_NULL,C_NULL,C_NULL,C_NULL,C_NULL)
         self = new(closure,surface_create,surface_destroy,context_create,context_destroy,show_page,copy_page,create_source_image)
 		self
 	end

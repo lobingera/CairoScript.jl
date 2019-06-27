@@ -30,18 +30,18 @@ using Compat
 
 csi = library_dependency("csi", aliases = ["libcairo-script-interpreter", "libcairo-script-interpreter-2.2", "libcairo-script-interpreter-2-2", "libcairo-script-interpreter-2.dll", "libcairo-script-interpreter-2.so.2"])
 
-@static if is_linux() begin
+if Sys.islinux() begin
         provides(AptGet, "libcairo-script-interpreter2-2",csi)
     end
 end
 
-@static if is_apple() begin
+if Sys.isapple() begin
         using Homebrew
         provides(Homebrew.HB, "cairo", [csi], os=:Darwin)
     end
 end
 
-@static if is_windows() begin
+if Sys.iswindows() begin
         using WinRPM
         provides(WinRPM.RPM,"libcairo-script-interpreter2",csi,os = :Windows)
     end
