@@ -20,22 +20,26 @@ pkg_dir = dirname(dirname(@__FILE__))
     
     # run a script that includes a writing operation
     surf = CairoImageSurface(256, 256, Cairo.FORMAT_ARGB32)
-    GC.@preserve surf begin
+
+    GC.@preserve surf h c ci begin
+
     testfile = joinpath(pkg_dir,"data","a1.cs");
 
     h = CairoScript.InterpreterHooks()
     h.surface_create = CairoScript.surf_create_c[]
     h.closure = surf.ptr
-    c = CairoScript.Interpreter()
-    c = CairoScript.interpreter_install_hooks(c,h)
+    ci = CairoScript.Interpreter()
+    c = CairoScript.interpreter_install_hooks(ci,h)
 
     
-        status = CairoScript.interpreter_run(c,testfile)
+    status = CairoScript.interpreter_run(c,testfile)
     
     @test status == 0
     finish(surf)
-    surf.ptr = C_NULL;
+    #surf.ptr = C_NULL;
     end
+
+
 
     outputfile = "out.png"
     @test isfile(outputfile)
